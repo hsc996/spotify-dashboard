@@ -21,8 +21,12 @@ export function ThemeContextProvider({children}){
 		}
 	}
 
+	const setToSystem = () => {
+		setCurrentTheme("light dark")
+	}
+
 	return (
-		<ThemeContext.Provider value={[currentTheme, toggleTheme]} >
+		<ThemeContext.Provider value={[currentTheme, toggleTheme, setToSystem]} >
 			{children}
 
 		</ThemeContext.Provider>
