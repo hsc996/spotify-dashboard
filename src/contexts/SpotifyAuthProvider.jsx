@@ -18,7 +18,7 @@ export function useSpotifyAuthContext(){
 
 // Client ID from app configured in Spotify developer dashboard
 // https://developer.spotify.com/dashboard
-const clientId = "14e4e57b7b2b4a93a859cf033350c84f";
+const clientId = "4a42fc02f857419d86ae01530c82c9f0";
 
 export function SpotifyAuthProvider({children}){
 	// Code required for Spotify sign-in process, not usable in API requests
