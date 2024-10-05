@@ -9,7 +9,11 @@ export function TopTracks(){
                 {topTracks.items.map((track) => {
                     return <div className="trackCard" key={track.name}>
                             <h2>{track.name}</h2>
+                            <h3>By {track.artists.map(artistObj => artistObj.name).join(", ")}</h3>
                             <img src={track.album.images[0].url} />
+                            <button>
+                                <a href={track.external_urls.spotify}>Listen to track</a>
+                            </button>
                         </div>
                 })}
             </div>
