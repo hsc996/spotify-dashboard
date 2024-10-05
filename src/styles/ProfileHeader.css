@@ -1,0 +1,18 @@
+#profileHeader {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    max-width: 300px;
+    margin: auto;
+    text-align: center;
+    padding: 8px;
+  
+    #title {
+      text-align: left;
+      color: grey;
+      font-size: 18px;
+    }
+  
+    img {
+      width: 50%;
+      border-radius: 50%;
+    }
+  }
