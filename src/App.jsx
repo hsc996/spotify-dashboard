@@ -1,11 +1,11 @@
 import './App.css'
-import { useSpotifyAuthContext } from './contexts/SpotifyAuthContextProvider';
+import { useSpotifyAuthContext } from './contexts/SpotifyAuthProvider';
 import { useThemeContext } from './contexts/ThemeContextProvider'
 
 function App() {
   
   // eslint-disable-next-line no-unused-vars
-  const [ toggleTheme, setToSystem] = useThemeContext();
+  const [ currentTheme, toggleTheme, setToSystem ] = useThemeContext();
   const {redirectToAuthCodeFlow} = useSpotifyAuthContext();
 
   return (

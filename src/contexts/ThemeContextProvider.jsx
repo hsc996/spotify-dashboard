@@ -1,7 +1,9 @@
+/* eslint-disable react/prop-types */
 import { useEffect, useContext, createContext, useState } from "react";
 
 export const ThemeContext = createContext("dark");
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function useThemeContext(){
 	return useContext(ThemeContext);
 }

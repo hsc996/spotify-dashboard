@@ -4,7 +4,7 @@
   font-weight: 400;
 
   color-scheme: light dark;
-  color: light-dark(#213547, rgb(230, 250, 248));
+  color: light-dark(#213547, rgba(255, 255, 255, 0.87));
   background-color: light-dark(#ffffff , #242424);
 
   font-synthesis: none;
@@ -42,7 +42,7 @@ button {
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: light-dark(#f9f9f9, #1a1a1a);
+  background-color: light-dark( #f9f9f9, #1a1a1a);
   cursor: pointer;
   transition: border-color 0.25s;
 }

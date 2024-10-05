@@ -1,3 +1,5 @@
+/* eslint-disable react-refresh/only-export-components */
+/* eslint-disable react/prop-types */
 import { createContext, useContext, useEffect, useState } from "react"
 
 export const spotifyAuthScaffold = {
@@ -14,7 +16,9 @@ export function useSpotifyAuthContext(){
 	return useContext(SpotifyAuthContext);
 }
 
-const clientId = "4a42fc02f857419d86ae01530c82c9f0";
+// Client ID from app configured in Spotify developer dashboard
+// https://developer.spotify.com/dashboard
+const clientId = "14e4e57b7b2b4a93a859cf033350c84f";
 
 export function SpotifyAuthProvider({children}){
 	// Code required for Spotify sign-in process, not usable in API requests
@@ -22,7 +26,7 @@ export function SpotifyAuthProvider({children}){
 	// User access tokens and refresh tokens - represents the current signed-in user 
 	let [userAuthData, setUserAuthData] = useState(spotifyAuthScaffold);
 
-	// When the page loads, check if we received a Spotify sfignin result 
+	// When the page loads, check if we received a Spotify signin result 
 	useEffect(() => {
 		// Attempt to find any query params from our current page URL
 		const params = new URLSearchParams(window.location.search);
@@ -38,53 +42,58 @@ export function SpotifyAuthProvider({children}){
 		// and never again
 	}, []);
 
-    useEffect(() => {
-        async function getAuthData(){
-            const authData = await getAuthTokens(clientId, userAuthCode);
-            setUserAuthData(authData);
-            // This cleans up the URL in the browser tab 
-            // removing the Spotify auth data so it doesn't impact the pageload useEffect
-            window.history.replace(null, "Spotify Statsboards", "/");
-        }
-        if (userAuthCode){
-            getAuthData();
-        }
-        // When userAuthCode changes or initialises, we'll try and run this useEffect
-    }, [userAuthCode]);
+	useEffect(() => {
 
-    async function getAuthTokens(clientId, code){
-        // eslint-disable-next-line no-unused-vars
-        const verifier = localStorage.getItem("verifier");
+		async function getAuthData(){
+			const authData = await getAuthTokens(clientId, userAuthCode);
+			setUserAuthData(authData);
+			// This cleans up the URL in the browser tab 
+			// removing the Spotify auth data so it doesn't impact the pageload useEffect
+			window.history.replaceState(null, "Spotify Statsboards", "/");
+		}
+		if (userAuthCode){
+			getAuthData();
+		}
 
-        const params = new URLSearchParams();
-        params.append("client_id", clientId);
-        params.append("grant_type", "authorization_code");
-        params.append("code", code);
-        // params.append("redirect_uri", process.env.SOME_SPOTIFY_REDIRECT_URI)
-        params.append("redirect_uri", "https://localhost:5173/spotifycallback");
+		// When userAuthCode changes or initialises, we'll try and run this useEffect
+	}, [userAuthCode]);
 
-        const result = await fetch("https://accounts.spotify.com/api/token", {
-            method: "POST",
-            headers: { "Content-type:": "application/x-www-form-urlencoded" },
-            body: params
-        });
+	async function getAuthTokens(clientId, code){
+		const verifier = localStorage.getItem("verifier");
 
-        const authTokens = await result.json();
+		const params = new URLSearchParams();
+		params.append("client_id", clientId);
+		params.append("grant_type", "authorization_code");
+		params.append("code", code);
+		// params.append("redirect_uri", process.env.SOME_SPOTIFY_REDIRECT_URI);
+		params.append("redirect_uri", "http://localhost:5173/spotifycallback");
+		params.append("code_verifier", verifier);
+
+		// https://api.spotify.com/auth?client_id=oqeihrt90183yrt2ogknjs&code=
+
+		const result = await fetch("https://accounts.spotify.com/api/token", {
+			method: "POST",
+			headers: { "Content-Type": "application/x-www-form-urlencoded"},
+			body: params
+		});
+
+		const authTokens = await result.json();
 		return authTokens;
-    }
+	}
 
-    async function redirectToAuthCodeFlow() {
-        // Create a security challenge with a verifier value
+	// This is the one that sends users to Spotify 
+	async function redirectToAuthCodeFlow() {
+		// Create a security challenge with a verifier value
 		const verifier = generateCodeVerifier(128);
 		const challenge = await generateCodeChallenge(verifier);
-        // Persist the verifier for the access token step to use later
+		// persist the verifier for the access token step to use later
 		localStorage.setItem("verifier", verifier);
 	
-        // Configure the API request to begin the auth flow with Spotify
+		// Configure the API request to begin the auth flow with Spotify
 		const params = new URLSearchParams();
 		params.append("client_id", clientId);
 		params.append("response_type", "code");
-		params.append("redirect_uri", "https://localhost:5173/spotifycallback");
+		params.append("redirect_uri", "http://localhost:5173/spotifycallback");
 		params.append("scope", "user-read-private user-read-email");
 		params.append("code_challenge_method", "S256");
 		params.append("code_challenge", challenge);
@@ -92,7 +101,7 @@ export function SpotifyAuthProvider({children}){
 		document.location = `https://accounts.spotify.com/authorize?${params.toString()}`;
 	}
 	
-    // Generates a random alphanumeric value to use as a security codeword
+	// Generates a random alphanumeric value to use as a security codeword
 	function generateCodeVerifier(length) {
 		let text = '';
 		let possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -103,7 +112,7 @@ export function SpotifyAuthProvider({children}){
 		return text;
 	}
 	
-    // Generates a challenge based on a given "codeVerifier" security codeword 
+	// Generates a challenge based on a given "codeVerifier" security codeword 
 	async function generateCodeChallenge(codeVerifier) {
 		const data = new TextEncoder().encode(codeVerifier);
 		const digest = await window.crypto.subtle.digest('SHA-256', data);
@@ -115,7 +124,7 @@ export function SpotifyAuthProvider({children}){
 
 
 	return(
-		<SpotifyAuthContext.Provider value={{ userAuthData, redirectToAuthCodeFlow }}>
+		<SpotifyAuthContext.Provider value={{userAuthData, redirectToAuthCodeFlow }}>
 			{children}
 		</SpotifyAuthContext.Provider>
 	);
