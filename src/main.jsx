@@ -8,12 +8,12 @@ import { SpotifyProfileProvider } from './contexts/SpotifyProfileProvider.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <ThemeContextProvider>
+    {/* <ThemeContextProvider> */}
       <SpotifyAuthProvider>
         <SpotifyProfileProvider>
           <App />
         </SpotifyProfileProvider>
       </SpotifyAuthProvider>
-    </ThemeContextProvider>
+    {/* </ThemeContextProvider> */}
   </StrictMode>,
 )
