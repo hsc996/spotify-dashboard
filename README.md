@@ -39,7 +39,7 @@
 - App theme
 
 
-## Frontend UI Frankworks
+## Frontend UI Frameworks
 
 - [Charka UI](https://v2.chakra-ui.com/)
 - [Material UI](google.com)
