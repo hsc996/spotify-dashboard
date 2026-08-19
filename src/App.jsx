@@ -6,15 +6,10 @@ import { useSpotifyAuthContext } from './contexts/SpotifyAuthProvider';
 // import { useThemeContext } from './contexts/ThemeContextProvider';
 
 function App() {
-  // Theme and Spotify context hooks
-  // const [currentTheme, toggleTheme, setToSystem] = useThemeContext();
   const { userAuthData, redirectToAuthCodeFlow } = useSpotifyAuthContext();
-
-  // State for loading and error handling
   const [loading, setLoading] = useState(null);
   const [errorMessage, setErrorMessage] = useState("");
 
-  // Generic button click handler
   const handleButtonClick = async (action, buttonName) => {
     setLoading(buttonName);
     try {
